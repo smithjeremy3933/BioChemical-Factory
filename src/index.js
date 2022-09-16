@@ -1,5 +1,7 @@
 require("./models/User");
 require("./models/Group");
+require("./models/GroupChatPost");
+require("./models/GroupChatComment")
 const express = require("express");
 const mongoKey = require("./keys/Keys")
 const mongoose = require("mongoose");

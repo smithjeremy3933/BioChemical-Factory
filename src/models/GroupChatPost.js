@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const groupChatPostSchema = new mongoose.Schema({
-    chatPosterID: {
+    chatPoster: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
@@ -9,17 +9,23 @@ const groupChatPostSchema = new mongoose.Schema({
         type: String,
         ref: "User"
     },
+    chatPosterGroup: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Group"
+    },
     chatPostSubject: {
         type: String,
-        default: ""
+        default: "",
+        required: true
     },
     chatPostContent: {
         type: String,
         default: "",
         required: true
     },
-    chatPostCommentIDs: [{
-
+    chatPostComments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "GroupChatComment"
     }]
 }, {
     timestamps : true

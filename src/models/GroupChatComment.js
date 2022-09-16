@@ -17,3 +17,7 @@ const groupChatCommentSchema = new mongoose.Schema({
 }, {
     timestamps : true
 })
+
+const GroupChatComment = mongoose.model("GroupChatComment", groupChatCommentSchema);
+
+module.exports = GroupChatComment;

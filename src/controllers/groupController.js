@@ -25,10 +25,7 @@ module.exports = {
             groupDescription,
             groupOwnerID: req.user._id,
             groupOwnerUsername: req.user.email,
-            groupMembers: [{
-                memberUsername: req.user.email,
-                memberID: req.user._id
-            }]
+            groupMembers: [req.user._id]
         })
         console.log(group);
 
