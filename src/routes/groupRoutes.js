@@ -1,6 +1,7 @@
 const express = require("express");
 const requireAuth = require("../middlewares/requireAuth");
 const GroupController = require("../controllers/groupController");
+const GroupChatController = require("../controllers/groupChatController")
 const router = express.Router();
 
 router.use(requireAuth);
@@ -12,5 +13,9 @@ router.get("/api/groups/group/addMember/:groupID/:newMemberID", GroupController.
 router.get("/api/groups/allGroups", GroupController.getAllGroups);
 
 router.get("/api/groups/getGroup/:id", GroupController.getOneGroupByID)
+
+////////////////////////////////////////////////////
+
+router.post("/api/groups/group/createPost/:groupID", GroupChatController.createGroupChatPost);
 
 module.exports = router;

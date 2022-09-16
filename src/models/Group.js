@@ -21,14 +21,12 @@ const groupSchema = new mongoose.Schema({
     },
     // Member IDs should be here
     groupMembers: [{
-        memberUsername: {
-            type: String,
-            ref: "User"
-        },
-        memberID: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"   
+    }],
+    groupChatPosts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "GroupChatPost"
     }],
 }, {
     timestamps : true
