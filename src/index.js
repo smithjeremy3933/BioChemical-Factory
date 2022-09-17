@@ -1,9 +1,10 @@
 require("./models/User");
-require("./models/Group");
-require("./models/GroupChatPost");
-require("./models/GroupChatComment")
+require("./models/Group/Group");
+require("./models/Group/GroupChatPost");
+require("./models/Group/GroupChatComment");
+require("./models/Logging/Log");
 const express = require("express");
-const mongoKey = require("./keys/Keys")
+const mongoKey = require("./keys/Keys");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
