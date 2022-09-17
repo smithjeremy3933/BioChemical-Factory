@@ -10,12 +10,14 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 const requireAuth = require("./middlewares/requireAuth");
 const groupRoutes = require("./routes/groupRoutes");
+const logRoutes = require("./routes/logRoutes");
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(authRoutes);
 app.use(groupRoutes);
+app.use(logRoutes);
 app.use((err, req, res, next) => {
   res.status(422).send({error: err.message })
 })

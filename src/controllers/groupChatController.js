@@ -1,6 +1,7 @@
 const GroupChatPosts = require("../models/Group/GroupChatPost");
 const GroupChatComment = require("../models/Group/GroupChatComment");
 const Group = require("../models/Group/Group");
+const Log = require("../models/Logging/Log");
 
 module.exports = {
     /*
@@ -26,20 +27,26 @@ module.exports = {
             chatPostComments: []
         })
 
+        const log = new Log({
+            logContent: "New Group Chat Post: " + groupChatPosts.chatPostSubject + ", Created By: " + groupChatPosts.chatPosterUsername + ".",
+            logPriority: 4
+        })
+
         console.log(groupChatPosts);
 
-        try {
-            Group.findById({_id : groupID})
-            .then(group => {
-                group.groupChatPosts.push(groupChatPosts)
-                return group.save();
-            })
-            .catch(next);
-            groupChatPosts.save();
+        Group.findById({_id : groupID})
+        .then(group => {
+            group.groupChatPosts.push(groupChatPosts)
             res.send(groupChatPosts);
-        } catch(err) {
-            res.status(422).send({ error: err.message });
-        }
+            return group.save();
+        })
+        .then(() => {
+            return groupChatPosts.save();
+        })
+        .then(() => {
+            return log.save();
+        })
+        .catch(next);
     },
     createGroupChatComment(req, res, next) {
         const { chatCommentContent } = req.body;
@@ -57,6 +64,12 @@ module.exports = {
             chatCommenter: req.user._id
         })
 
+        const log = new Log({
+            logContent: "New Group Chat Comment: " + groupChatComment.chatCommentContent 
+                        + ", Created By: " + groupChatComment.chatCommenterUsername + ".",
+            logPriority: 5
+        })
+
         console.log(groupChatComment);
 
         GroupChatPosts.findById({ _id : postID })
@@ -67,6 +80,9 @@ module.exports = {
             .then(() => {
                 res.send(groupChatComment)
                 return groupChatComment.save()
+            })
+            .then(() => {
+                return log.save();
             })
             .catch(next)
     }
