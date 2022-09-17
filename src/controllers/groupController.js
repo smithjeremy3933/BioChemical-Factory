@@ -1,5 +1,6 @@
-const Group = require("../models/Group");
+const Group = require("../models/Group/Group");
 const User = require("../models/User");
+const Log = require("../models/Logging/Log");
 
 module.exports = {
     /*
@@ -27,10 +28,16 @@ module.exports = {
             groupOwnerUsername: req.user.email,
             groupMembers: [req.user._id]
         })
+
+        const log = new Log({
+            logContent: "New Group: " + group.groupName + ", Created By: " + group.groupOwnerUsername + ".",
+            logPriority: 3
+        })
         console.log(group);
 
         try {
             group.save();
+            log.save();
             res.send(group);
         } catch(err) {
             res.status(422).send({ error: err.message });

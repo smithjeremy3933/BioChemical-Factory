@@ -18,4 +18,6 @@ router.get("/api/groups/getGroup/:id", GroupController.getOneGroupByID)
 
 router.post("/api/groups/group/createPost/:groupID", GroupChatController.createGroupChatPost);
 
+router.post("/api/groups/group/createComment/:postID", GroupChatController.createGroupChatComment)
+
 module.exports = router;
