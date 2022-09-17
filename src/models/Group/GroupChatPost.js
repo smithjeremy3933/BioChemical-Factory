@@ -31,6 +31,13 @@ const groupChatPostSchema = new mongoose.Schema({
     timestamps : true
 })
 
+groupChatPostSchema.pre('remove', function(next) {
+    const GroupChatComment = mongoose.model("GroupChatComment");
+
+    GroupChatComment.remove({ _id : { $in: this.chatPostComments } })
+        .then(() => next());
+})
+
 const GroupChatPost = mongoose.model("GroupChatPost", groupChatPostSchema);
 
 module.exports = GroupChatPost;

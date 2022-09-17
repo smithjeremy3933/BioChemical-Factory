@@ -85,5 +85,20 @@ module.exports = {
                 return log.save();
             })
             .catch(next)
+    },
+
+    deleteGroupChatComment (req, res, next) {
+        const groupChatCommentID = req.params.id;
+
+        GroupChatComment.findByIdAndRemove({ _id : groupChatCommentID })
+        .then(groupChatComment => {
+            res.status(204).send(groupChatComment)
+            const log = new Log({
+                logContent: "Group Chat Comment Delete.",
+                logPriority: 5
+            })
+            return log.save();
+        })
+        .catch(next);
     }
 }

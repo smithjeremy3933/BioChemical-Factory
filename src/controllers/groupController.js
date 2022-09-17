@@ -26,7 +26,8 @@ module.exports = {
             groupDescription,
             groupOwnerID: req.user._id,
             groupOwnerUsername: req.user.email,
-            groupMembers: [req.user._id]
+            groupMembers: [req.user._id],
+            groupChatPosts: []
         })
 
         const log = new Log({
@@ -46,6 +47,13 @@ module.exports = {
 
     getAllGroups (req, res, next)  {
         Group.find()
+            .populate({
+                path: 'groupChatPosts',
+                populate: {
+                    path: 'chatPostComments',
+                    model: 'GroupChatComment'
+                }
+            })
             .then(group => res.send(group))
             .catch(next);
     },
@@ -54,6 +62,13 @@ module.exports = {
         const groupID = req.params.id;
         
         Group.findById({_id : groupID})
+                    .populate({
+                path: 'groupChatPosts',
+                populate: {
+                    path: 'chatPostComments',
+                    model: 'GroupChatComment'
+                }
+            })
             .then(group => res.send(group))
             .catch(next);
     },
@@ -64,15 +79,17 @@ module.exports = {
         let newMember;
 
         User.findById({ _id : newMemberID })
-            .then(member => { return newMember = {
-                memberUsername: member.email,
-                memberID: member._id
-            }})
+            .then(member => { return newMember = member })
             .then(() =>  Group.findById({ _id : groupID }))
             .then(group => {
-                group.groupMembers.push(newMember)
-                res.send(newMember);
-                return group.save()
+                group.groupMembers.push(newMember._id)
+                res.send(newMember._id);
+                const log = new Log({
+                    logContent: "New Member Added to Group: " + newMember.email + ", Added to Group by: " + group.groupOwnerUsername + ".",
+                    logPriority: 3
+                })
+                log.save();
+                return group.save();
             })
             .catch(next)
     }
